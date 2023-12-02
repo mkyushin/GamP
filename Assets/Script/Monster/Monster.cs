@@ -3,20 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Monster : MonoBehaviour
 {
     // Stat
     public float health;
-    public float speed;
+    public float curSpeed;
+    public float walkSpeed;
+    public float runSpeed;
     // if player is in this range, monster detect player, and chase player
     public float detectPlayerRange;
     public float attackRange;
     public float attackSpeed;
+    public float attackDamage;
 
     // Const Value
     private const float DetectPlayerTick = 0.2f;
-
+    private const float DestroyDelay = 3f;
+    
     // Player Position
     private Transform _playerTransform;
      
@@ -28,6 +34,13 @@ public class Monster : MonoBehaviour
     private bool _isDetectPlayer;
     private bool _isAttacking = false;
     private bool _isRunning = false;
+    private bool _isDead = false;
+    
+    // Animation Hash 
+    private static readonly int IsDetectPlayer = Animator.StringToHash("IsDetectPlayer");
+    private static readonly int IsLostPlayer = Animator.StringToHash("IsLostPlayer");
+    private static readonly int IsDead = Animator.StringToHash("IsDead");
+    private static readonly int Health = Animator.StringToHash("Health");
 
     private void Awake()
     {
@@ -39,7 +52,9 @@ public class Monster : MonoBehaviour
         _nav = GetComponent<NavMeshAgent>();
         
         // Set Stat
-        _nav.speed = speed;
+        curSpeed = walkSpeed;
+        _nav.speed = curSpeed;
+        _anim.SetFloat(Health, health);
         
         // Start Coroutine
         StartCoroutine(IsPlayerInsideOfDetectRange());
@@ -48,6 +63,8 @@ public class Monster : MonoBehaviour
     
     private void Update()
     {
+        if(_isDead) return;
+        
         if (_isDetectPlayer)
         {
             _nav.SetDestination(_playerTransform.position);
@@ -64,7 +81,10 @@ public class Monster : MonoBehaviour
             float distance = Vector3.Distance(transform.position, _playerTransform.position);
             if (distance < detectPlayerRange)
             {
-                _isDetectPlayer = true;
+                curSpeed = walkSpeed;
+                _nav.speed = curSpeed;
+                
+                _anim.SetTrigger(IsDetectPlayer);
 
                 StartCoroutine(IsPlayerOutsideOfDetectRange());
                 yield break;
@@ -83,6 +103,7 @@ public class Monster : MonoBehaviour
             if (distance > detectPlayerRange)
             {
                 _isDetectPlayer = false;
+                _anim.SetTrigger(IsLostPlayer);
                 
                 // Stop NavMeshAgent
                 _nav.SetDestination(transform.position);
@@ -104,6 +125,47 @@ public class Monster : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+
+
+    #region CallOnAnimationEvent
     
+    public void ScreamEnd()
+    {
+        Debug.Log("ScreamEnd");
+        _isDetectPlayer = true;
+    }
+
+    public void StartRunning()
+    {
+        Debug.Log("StartRunning");
+        curSpeed = runSpeed;
+        _nav.speed = curSpeed;
+    }
+
+    public void DeadCompletely()
+    {
+        Debug.Log("DeadCompletely");
+        Destroy(gameObject, DestroyDelay);
+    }
     
+    #endregion
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(health <= 0) return;
+        
+        if(other.TryGetComponent(out Bullet bullet))
+        {
+            health -= bullet.damage;
+            _anim.SetFloat(Health, health);
+            if (health <= 0)
+            {
+                _nav.enabled = false;
+                _isDead = true;
+                _anim.SetBool(IsDead, true);
+                
+                StopAllCoroutines();
+            }
+        }
+    }
 }
