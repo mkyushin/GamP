@@ -7606,7 +7606,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1309486516299566, guid: 227ee07e9e5b7914ba8fbb8f430be9a5, type: 3}
       propertyPath: m_Name
-      value: Ghoul
+      value: "\uC2DC\uC791\uBC29\uC880\uBE44"
       objectReference: {fileID: 0}
     - target: {fileID: 4467757482891228, guid: 227ee07e9e5b7914ba8fbb8f430be9a5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8826,7 +8826,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8c681d8d65e34344d8bb0b6745112b7d, type: 3}
       propertyPath: m_Name
-      value: Parasite L Starkie
+      value: "\uAE30\uBCF8\uC880\uBE44_Monster1"
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8c681d8d65e34344d8bb0b6745112b7d, type: 3}
       propertyPath: m_IsActive
@@ -10254,7 +10254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8c681d8d65e34344d8bb0b6745112b7d, type: 3}
       propertyPath: m_Name
-      value: Parasite L Starkie2
+      value: "\uAE30\uBCF8\uC880\uBE44_Monster2"
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8c681d8d65e34344d8bb0b6745112b7d, type: 3}
       propertyPath: m_IsActive
@@ -38360,7 +38360,7 @@ PrefabInstance:
       objectReference: {fileID: 543450653555338332}
     - target: {fileID: 8880979439084286637, guid: 97bad345fdf20d744b9a8bd42e4da1cf, type: 3}
       propertyPath: m_Name
-      value: Ch45
+      value: "\uD50C\uB808\uC774\uC5B4"
       objectReference: {fileID: 0}
     - target: {fileID: 8880979439084286637, guid: 97bad345fdf20d744b9a8bd42e4da1cf, type: 3}
       propertyPath: m_TagString
