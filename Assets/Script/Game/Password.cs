@@ -252,6 +252,12 @@ public class Password : MonoBehaviour
 
     }
 
+    public void VRDoorLockInteraction()
+    {
+        Debug.Log("pressed");
+        layer_doorfinal.SetActive(true);
+        Debug.Log("actived");
+    }
 
 
 
