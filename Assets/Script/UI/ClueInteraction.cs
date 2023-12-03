@@ -19,6 +19,8 @@ public class ClueInteraction : MonoBehaviour
     public GameObject backbtn_ClueDetailToMain;
     public GameObject txt_escapemessage;
 
+    public GameObject VRCanvas_Primary;
+
 
 
 
@@ -234,7 +236,7 @@ public class ClueInteraction : MonoBehaviour
 
         showClueDetails.SetActive(true);
         layer_main.SetActive(false);
-
+        VRCanvas_Primary.SetActive(true);
 
 
 
@@ -255,6 +257,7 @@ public class ClueInteraction : MonoBehaviour
 
             showClueDetails.SetActive(true);
             layer_main.SetActive(false);
+        VRCanvas_Primary.SetActive(true);
     }
 
     public void VRClueInteracion_Clue_1_1()
@@ -270,6 +273,7 @@ public class ClueInteraction : MonoBehaviour
         Image myClue1Image = myClue1.GetComponent<Image>();
         myClue1Image.sprite = clueImage[1];
         showClueDetails.SetActive(true);
+        VRCanvas_Primary.SetActive(true);
 
 
     }
@@ -284,6 +288,7 @@ public class ClueInteraction : MonoBehaviour
 
         showClueDetails.SetActive(true);
         layer_main.SetActive(false);
+        VRCanvas_Primary.SetActive(true);
     }
 
     public void VRClueInteracion_Clue_1_3()
@@ -296,6 +301,7 @@ public class ClueInteraction : MonoBehaviour
 
         showClueDetails.SetActive(true);
         layer_main.SetActive(false);
+        VRCanvas_Primary.SetActive(true);
     }
     public void VRClueInteracion_Clue_2()
     {
@@ -310,6 +316,7 @@ public class ClueInteraction : MonoBehaviour
         Image myClue2Image = myClue2.GetComponent<Image>();
         myClue2Image.sprite = clueImage[2];
         showClueDetails.SetActive(true);
+        VRCanvas_Primary.SetActive(true);
     }
     public void VRClueInteracion_Clue_3()
     {
@@ -324,6 +331,7 @@ public class ClueInteraction : MonoBehaviour
         Image myClue3Image = myClue3.GetComponent<Image>();
         myClue3Image.sprite = clueImage[3];
         showClueDetails.SetActive(true);
+        VRCanvas_Primary.SetActive(true);
     }
     public void VRClueInteracion_Clue_4()
     {
@@ -338,6 +346,7 @@ public class ClueInteraction : MonoBehaviour
         Image myClue4Image = myClue4.GetComponent<Image>();
         myClue4Image.sprite = clueImage[4];
         showClueDetails.SetActive(true);
+        VRCanvas_Primary.SetActive(true);
     }
   
 
