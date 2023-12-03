@@ -1,5 +1,7 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,10 +37,54 @@ public class ShowInteractMessage : MonoBehaviour
     
     public GameObject axeSpwaned;
 
-
-
-
     private int spacebarCount = 0;
+
+
+
+
+
+
+    private bool isDoor1Opened = false;
+
+
+    
+
+    public void VRDoor1_Interaction()
+    {
+        Vector3 playerLoc = player.position;
+        Vector3 objLoc = door1.transform.position;
+        float distance = Vector3.Distance(playerLoc, objLoc);
+
+        if (distance <= distanceRange && !isDoor1Opened)     //문 범위에 있고, 문이 닫혀있으면, 
+        {
+            UIManager.uIManagerInstance.MessageDisplay(0);      //문을 여세요 메세지 출력
+            UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(true);
+
+       
+        }
+        if (isDoor1Opened == true)     //문이 열려있으면,          
+        {
+            UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(false);
+        }
+
+
+    }
+
+
+    public void MakeDoor1Opened()     // door1 클릭시에 
+    {
+        isDoor1Opened = true;
+        door1.SetActive(false);
+        door1Opened.SetActive(true);
+
+    }
+
+
+
+
+
+
+
 
 
     public void ShowMessage()
@@ -56,7 +102,7 @@ public class ShowInteractMessage : MonoBehaviour
                 if(obj.tag=="Door1" &&  (distance<= distanceRange))
                 {   
 
-                    UIManager.uIManagerInstance.MessageDisplay(0);  
+                    UIManager.uIManagerInstance.MessageDisplay(0);    //문을 여세요
                     if (!UIManager.uIManagerInstance.layerMessages_txt.gameObject.activeSelf) 
                     {
                         UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(true); 
@@ -68,6 +114,7 @@ public class ShowInteractMessage : MonoBehaviour
                         door1.SetActive(false);
                         door1Opened.SetActive(true);
                     }
+                    
                     // if (Input.GetKeyDown(KeyCode.E) && door1Opened.activeSelf )
                     // {   
                     //     door1.SetActive(true);
@@ -254,6 +301,8 @@ public class ShowInteractMessage : MonoBehaviour
     void Update()
     {
         ShowMessage();
+
+        VRDoor1_Interaction();
 
     }
 }
