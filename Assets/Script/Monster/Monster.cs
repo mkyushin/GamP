@@ -8,7 +8,8 @@ using UnityEngine.Serialization;
 public class Monster : MonoBehaviour
 {
     // Stat
-    public float health;
+    public float curHealth;
+    public float maxHealth;
     public float curSpeed;
     public float walkSpeed;
     public float runSpeed;
@@ -43,7 +44,12 @@ public class Monster : MonoBehaviour
     // coroutine
     private Coroutine _attackCoroutine;
     
+    // Audio
+    private AudioSource _audioSource;
 
+    // Effect
+    [SerializeField] List<GameObject> _bloodList;
+    
     private void Awake()
     {
         // Get Player Position
@@ -52,16 +58,20 @@ public class Monster : MonoBehaviour
         // Get Components
         _anim = GetComponent<Animator>();
         _nav = GetComponent<NavMeshAgent>();
+        _audioSource = GetComponent<AudioSource>();
         
         // Init Attack Part
         _attackPart.SetActive(false);
         _attackPart.GetComponent<MonsterAttackPart>().SetMonster(this);
         
         // Set Stat
+        curHealth = maxHealth;
         curSpeed = walkSpeed;
         _nav.speed = curSpeed;
         _nav.stoppingDistance = attackRange;
-        _anim.SetFloat(Health, health);
+        _anim.SetFloat(Health, curHealth);
+        foreach (GameObject blood in _bloodList)
+            blood.SetActive(false);
         
         // Start Coroutine
         StartCoroutine(IsPlayerInsideOfDetectRange());
@@ -93,7 +103,8 @@ public class Monster : MonoBehaviour
                     _nav.speed = curSpeed;
                     
                     _anim.SetTrigger(IsDetectPlayer);
-    
+                    _audioSource.Play();
+                    
                     StartCoroutine(IsPlayerOutsideOfDetectRange());
                     _attackCoroutine = StartCoroutine(AttackCoroutine());
                     yield break;
@@ -113,6 +124,7 @@ public class Monster : MonoBehaviour
                 {
                     _isDetectPlayer = false;
                     _anim.SetTrigger(IsLostPlayer);
+                    _audioSource.Stop();
                     
                     // Stop NavMeshAgent
                     _nav.SetDestination(transform.position);
@@ -160,11 +172,22 @@ public class Monster : MonoBehaviour
 
     public void GetDamaged(float damage)
     {
-        if(health <= 0) return;
+        if(curHealth <= 0) return;
         
-        health -= damage;
-        _anim.SetFloat(Health, health);
-        if (health <= 0)
+        curHealth -= damage;
+        _anim.SetFloat(Health, curHealth);
+        
+        if(curHealth/ maxHealth < 0.3f)
+        {
+            _bloodList[2].SetActive(true);
+            _bloodList[3].SetActive(true);
+        }else if(curHealth/ maxHealth < 0.6f)
+        {
+            _bloodList[0].SetActive(true);
+            _bloodList[1].SetActive(true);
+        }
+        
+        if (curHealth <= 0)
         {
             _nav.enabled = false;
             _isDead = true;
@@ -186,6 +209,8 @@ public class Monster : MonoBehaviour
 
     public void StartRunning()
     {
+        if(Math.Abs(curSpeed - runSpeed) < 0.01f) return;
+        
         Debug.Log("StartRunning");
         curSpeed = runSpeed;
         _nav.speed = curSpeed;

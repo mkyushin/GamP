@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public void GetDamaged(float damage)
     {
         health -= damage;
-        Debug.Log("[Player] GetDamaged : " + damage + "current health : " + health);
+        Debug.Log("[Player] GetDamaged : " + damage + "/ current health : " + health);
         if (health <= 0)
         {
             Die();
