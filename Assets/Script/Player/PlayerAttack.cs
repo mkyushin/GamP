@@ -10,18 +10,11 @@ public class PlayerAttack : MonoBehaviour
 
     public GameObject a;
 
-
-
-
     void Update()
     {   
-
-        
-
         if(Input.GetKeyDown(KeyCode.Space))
         {
             Attack1();      
-            
         }
         
     }
@@ -34,9 +27,6 @@ public class PlayerAttack : MonoBehaviour
         // 회전을 적용합니다.
         axe.transform.Rotate(0, rotationAmount, 0);
 
-
-
-        
     }
 
 

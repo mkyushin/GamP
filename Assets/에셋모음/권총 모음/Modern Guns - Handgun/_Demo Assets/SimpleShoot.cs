@@ -51,31 +51,39 @@ public class SimpleShoot : MonoBehaviour
 
     void Update()
     {
-        
-        //If you want a different input, change it here
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
-        {
-            if(BulletCnt > 0)
-            {
-                //Calls animation on the gun that has the relevant animation events that will fire
-                gunAnimator.SetTrigger("Fire");
-            }
-            else
-            {
-                SoundSource.PlayOneShot(emptyBulletSound);
-                Dialog.gameObject.SetActive(true);
-            }
-        }
 
-        if (OVRInput.GetDown(OVRInput.Button.One))
+        if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger)||OVRInput.Get(OVRInput.Button.SecondaryHandTrigger))
         {
-            SoundSource.PlayOneShot(reloadSound);
-            BulletCnt = 5;
-            Dialog.gameObject.SetActive(false);
+            //If you want a different input, change it here
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+            {
+                if(BulletCnt > 0)
+                {
+                    //Calls animation on the gun that has the relevant animation events that will fire
+                    gunAnimator.SetTrigger("Fire");
+                }
+                else
+                {
+                    SoundSource.PlayOneShot(emptyBulletSound);
+                    Dialog.gameObject.SetActive(true);
+                }
+            }
+
+            if (OVRInput.GetDown(OVRInput.Button.One))
+            {
+                SoundSource.PlayOneShot(reloadSound);
+                BulletCnt = 5;
+                Dialog.gameObject.SetActive(false);
+            }
+
         }
+        
+        
+    
 
     }
 
+  
 
     //This function creates the bullet behavior
     void Shoot()
