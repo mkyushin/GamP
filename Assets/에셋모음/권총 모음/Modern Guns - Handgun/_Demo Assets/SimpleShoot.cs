@@ -21,6 +21,17 @@ public class SimpleShoot : MonoBehaviour
     [Tooltip("Casing Ejection Speed")] [SerializeField] private float ejectPower = 150f;
 
 
+    [Header("Audio Source")]
+    public AudioClip shootingSound;
+    public AudioClip emptyBulletSound;
+    public AudioClip reloadSound;
+    private AudioSource SoundSource;
+
+    [Header("Bullet count")]
+    public int BulletCnt;
+    public Canvas Dialog;
+
+
     void Start()
     {
         if (barrelLocation == null)
@@ -28,16 +39,41 @@ public class SimpleShoot : MonoBehaviour
 
         if (gunAnimator == null)
             gunAnimator = GetComponentInChildren<Animator>();
+        
+
+        SoundSource = GetComponent<AudioSource>();
+        if (SoundSource == null)
+            SoundSource = gameObject.AddComponent<AudioSource>();
+
+        BulletCnt = 5;
+        Dialog.gameObject.SetActive(false);
     }
 
     void Update()
     {
+        
         //If you want a different input, change it here
         if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
         {
-            //Calls animation on the gun that has the relevant animation events that will fire
-            gunAnimator.SetTrigger("Fire");
+            if(BulletCnt > 0)
+            {
+                //Calls animation on the gun that has the relevant animation events that will fire
+                gunAnimator.SetTrigger("Fire");
+            }
+            else
+            {
+                SoundSource.PlayOneShot(emptyBulletSound);
+                Dialog.gameObject.SetActive(true);
+            }
         }
+
+        if (OVRInput.GetDown(OVRInput.Button.One))
+        {
+            SoundSource.PlayOneShot(reloadSound);
+            BulletCnt = 5;
+            Dialog.gameObject.SetActive(false);
+        }
+
     }
 
 
@@ -52,14 +88,17 @@ public class SimpleShoot : MonoBehaviour
 
             //Destroy the muzzle flash effect
             Destroy(tempFlash, destroyTimer);
-        }
+
+            // Create a bullet and add force on it in direction of the barrel
+            Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
+
+            SoundSource.PlayOneShot(shootingSound);
+            BulletCnt--;
+        }  
 
         //cancels if there's no bullet prefeb
         if (!bulletPrefab)
         { return; }
-
-        // Create a bullet and add force on it in direction of the barrel
-        Instantiate(bulletPrefab, barrelLocation.position, barrelLocation.rotation).GetComponent<Rigidbody>().AddForce(barrelLocation.forward * shotPower);
 
     }
 
