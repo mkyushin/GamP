@@ -45,9 +45,10 @@ public class ShowInteractMessage : MonoBehaviour
 
 
     private bool isDoor1Opened = false;
+    private bool isDoor2_1Opened = false;
+    private bool isDoor2_2Opened = false;
 
 
-    
 
     public void VRDoor1_Interaction()
     {
@@ -71,11 +72,68 @@ public class ShowInteractMessage : MonoBehaviour
     }
 
 
+    public void VRDoor2_1_Interaction()
+    {
+        Vector3 playerLoc = player.position;
+        Vector3 objLoc = door2_1.transform.position;
+        float distance = Vector3.Distance(playerLoc, objLoc);
+
+        if (distance <= distanceRange && !isDoor2_1Opened)     //문 범위에 있고, 문이 닫혀있으면, 
+        {
+            UIManager.uIManagerInstance.MessageDisplay(7);      //문을 여세요 메세지 출력
+            UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(true);
+            useClue3.gameObject.SetActive(true);
+
+        }
+        if (isDoor2_1Opened == true)     //문이 열려있으면,          
+        {
+            UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(false);
+            useClue3.gameObject.SetActive(false);
+        }
+
+
+    }
+
+
+
+
+    public void VRDoor2_2_Interaction()
+    {
+        Vector3 playerLoc = player.position;
+        Vector3 objLoc = door2_2.transform.position;
+        float distance = Vector3.Distance(playerLoc, objLoc);
+
+        if (distance <= distanceRange && !isDoor2_2Opened)     //문 범위에 있고, 문이 닫혀있으면, 
+        {
+            UIManager.uIManagerInstance.MessageDisplay(0);      //문을 여세요 메세지 출력
+            UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(true);
+            
+
+        }
+        if (isDoor2_2Opened == true)     //문이 열려있으면,          
+        {
+            UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(false);
+        }
+
+
+    }
+
+
     public void MakeDoor1Opened()     // door1 클릭시에 
     {
         isDoor1Opened = true;
         door1.SetActive(false);
         door1Opened.SetActive(true);
+
+    }
+    
+
+
+    public void MakeDoor2_2Opened()     // door2_2 클릭시에 
+    {
+        isDoor2_2Opened = true;
+        door2_2.SetActive(false);
+        door2_2Opened.SetActive(true);
 
     }
 
@@ -253,11 +311,13 @@ public class ShowInteractMessage : MonoBehaviour
             UIManager.uIManagerInstance.MessageDisplay(8);   // 문이 열렸습니다.
             if (!UIManager.uIManagerInstance.layerMessages_txt.gameObject.activeSelf)
             {
-                UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(true);
+                UIManager.uIManagerInstance.layerMessages_txt.gameObject.SetActive(false
+                    );
                 StartCoroutine(HideMessageAfterDelay(1.0f));
 
             }
             Layer2.SetActive(false);
+            
         }
 
         
@@ -304,5 +364,6 @@ public class ShowInteractMessage : MonoBehaviour
 
         VRDoor1_Interaction();
 
+        VRDoor2_2_Interaction();
     }
 }

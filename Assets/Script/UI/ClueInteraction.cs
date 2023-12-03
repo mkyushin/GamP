@@ -332,6 +332,9 @@ public class ClueInteraction : MonoBehaviour
         myClue3Image.sprite = clueImage[3];
         showClueDetails.SetActive(true);
         VRCanvas_Primary.SetActive(true);
+
+        useClue3.gameObject.SetActive(true);
+
     }
     public void VRClueInteracion_Clue_4()
     {
@@ -351,6 +354,8 @@ public class ClueInteraction : MonoBehaviour
   
 
 
+
+    
 
 
 
