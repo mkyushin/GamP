@@ -363,7 +363,7 @@ public class ShowInteractMessage : MonoBehaviour
         ShowMessage();
 
         VRDoor1_Interaction();
-
+        VRDoor2_1_Interaction();
         VRDoor2_2_Interaction();
     }
 }

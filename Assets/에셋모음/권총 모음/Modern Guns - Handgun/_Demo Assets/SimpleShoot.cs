@@ -16,9 +16,9 @@ public class SimpleShoot : MonoBehaviour
     [SerializeField] private Transform casingExitLocation;
 
     [Header("Settings")]
-    [Tooltip("Specify time to destory the casing object")] [SerializeField] private float destroyTimer = 2f;
-    [Tooltip("Bullet Speed")] [SerializeField] private float shotPower = 500f;
-    [Tooltip("Casing Ejection Speed")] [SerializeField] private float ejectPower = 150f;
+    [Tooltip("Specify time to destory the casing object")][SerializeField] private float destroyTimer = 2f;
+    [Tooltip("Bullet Speed")][SerializeField] private float shotPower = 500f;
+    [Tooltip("Casing Ejection Speed")][SerializeField] private float ejectPower = 150f;
 
 
     [Header("Audio Source")]
@@ -39,42 +39,50 @@ public class SimpleShoot : MonoBehaviour
 
         if (gunAnimator == null)
             gunAnimator = GetComponentInChildren<Animator>();
-        
+
 
         SoundSource = GetComponent<AudioSource>();
         if (SoundSource == null)
             SoundSource = gameObject.AddComponent<AudioSource>();
 
-        BulletCnt = 5;
+        BulletCnt = 10;
         Dialog.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        
-        //If you want a different input, change it here
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+
+        if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger) || OVRInput.Get(OVRInput.Button.SecondaryHandTrigger))
         {
-            if(BulletCnt > 0)
+            //If you want a different input, change it here
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
             {
-                //Calls animation on the gun that has the relevant animation events that will fire
-                gunAnimator.SetTrigger("Fire");
+                if (BulletCnt > 0)
+                {
+                    //Calls animation on the gun that has the relevant animation events that will fire
+                    gunAnimator.SetTrigger("Fire");
+                }
+                else
+                {
+                    SoundSource.PlayOneShot(emptyBulletSound);
+                    Dialog.gameObject.SetActive(true);
+                }
             }
-            else
+
+            if (OVRInput.GetDown(OVRInput.Button.One))
             {
-                SoundSource.PlayOneShot(emptyBulletSound);
-                Dialog.gameObject.SetActive(true);
+                SoundSource.PlayOneShot(reloadSound);
+                BulletCnt = 5;
+                Dialog.gameObject.SetActive(false);
             }
+
         }
 
-        if (OVRInput.GetDown(OVRInput.Button.One))
-        {
-            SoundSource.PlayOneShot(reloadSound);
-            BulletCnt = 5;
-            Dialog.gameObject.SetActive(false);
-        }
+
+
 
     }
+
 
 
     //This function creates the bullet behavior
@@ -94,7 +102,7 @@ public class SimpleShoot : MonoBehaviour
 
             SoundSource.PlayOneShot(shootingSound);
             BulletCnt--;
-        }  
+        }
 
         //cancels if there's no bullet prefeb
         if (!bulletPrefab)
